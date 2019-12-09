@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>日历转换</title>
+    <style>
+        body{
+            padding: 0;
+            margin: 0;
+        }
+        .dao{
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            align-content: center;
+            justify-content: center;
+        }
+        .dao .get{
+        }
+        .dao .get input{
+            width: 100px;
+            height: 40px;
+            margin-left: 10px;
+            border-radius: 5px;
+            border: 1px solid #999;
+            box-shadow: 0 0 5px #aaa;
+            text-align: center;
+        }
+        .dao .get button{
+            width: 100px;
+            height: 40px;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+        .dao .text{
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .dao .text div{
+            width: 100%;
+            text-align: center;
+            margin-top: 20px;
+        }
+        #copy{
+            position: fixed;
+            top: 0;
+            left: -200vw;
+        }
+    </style>
+</head>
+<body>
+    <div class="dao">
+        <div class="get">
+            <input class="year" value="2020">
+            <input class="month">
+            <input class="day">
+            <button class="change">转换/复制</button>
+        </div>
+        <div class="text">
+            <div class="newYear"></div>
+            <div class="oldYear"></div>
+            <input id="copy"></input>
+        </div>
+    </div>
+</body>
+<script src="./calendar.js"></script>
+<script src="./clipboard.min.js"></script>
+<script src="./jquery.min.js"></script>
+<script type="text/javascript">
+    $(".change").click(function(){
+        let lunar
+        let copy
+        let year = $(".year").val()
+        let month = $(".month").val()
+        let day = $(".day").val()
+        if (year && month && day) {
+            lunar = calendar.lunar2solar(Number(year),Number(month),Number(day))
+            copy = lunar.cYear + '年' +lunar.cMonth +  '月' + lunar.cDay +'日'
+            $(".newYear").html('新历：'+lunar.cYear + '年' +lunar.cMonth +  '月' + lunar.cDay +'日（'+lunar.astro+'）')
+            $(".oldYear").html('农历：'+lunar.lYear + '年' +lunar.IMonthCn+lunar.IDayCn+'，'+lunar.gzYear+'年'+lunar.gzMonth+'月'+lunar.gzDay+'日（'+lunar.Animal+'年）')
+            $("#copy").val(lunar.cYear + '年' +lunar.cMonth +  '月' + lunar.cDay +'日')
+            $("#copy").select()
+            document.execCommand("Copy")
+        }
+    })
+</script>
+</html>
